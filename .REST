@@ -1,0 +1,53 @@
+###
+GET http://localhost:3000/movies
+
+###
+GET http://localhost:3000/movies/640ea04f84d37456b2142a15
+
+###
+POST http://localhost:3000/movies HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Tt",
+    "category": ["sci-fi", "action"],
+    "motion_picture_rating": "PG",
+    "duration": "00h 00m",
+    "plot": "Story says that....",
+    "release_date": "May 01",
+    "release_year": "1895",
+    "rating": "5.0",
+    "tras": "xd"
+}
+
+###
+PUT http://localhost:3000/movies/640ea04f84d37456b2142a10
+content-type: application/json
+
+{
+    "title": "TETETE313T",
+    "category": ["sci-fi", "action"],
+    "motion_picture_rating": "PG",
+    "duration": "00h 00m",
+    "plot": "Story says that....",
+    "release_date": "May 01",
+    "release_year": "1895",
+    "rating": "5.0",
+    "tras": "xd"
+}
+
+###
+DELETE http://localhost:3000/movies/640e9b88f22124b7c88c8eb2
+
+
+
+###
+GET http://localhost:3000/user/favorites
+
+###
+POST http://localhost:3000/user/favorites HTTP/1.1
+content-type: application/json
+
+{
+    "movie_id": "24234"
+}
