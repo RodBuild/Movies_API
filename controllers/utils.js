@@ -36,6 +36,13 @@ const isAuthenticated = async (req, res, next) => {
   } else next();
 };
 
+const isAdmin = async (user_data) => {
+  const validEmail = ['rodrigo.edwin@hotmail.com', 'admin@admin.com'];
+  if (user_data === undefined) return false;
+  else if (validEmail.includes(user_data.email)) return true;
+  else return false;
+};
+
 validateMovie = [
   check('title')
     .exists()
@@ -111,4 +118,10 @@ validateMovie = [
   },
 ];
 
-module.exports = { validId, validateMovie, isAuthenticated, isValidMovieId };
+module.exports = {
+  validId,
+  validateMovie,
+  isAuthenticated,
+  isValidMovieId,
+  isAdmin,
+};

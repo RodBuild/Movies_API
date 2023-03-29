@@ -1,0 +1,126 @@
+<div class="container">
+  <div class="card text-center">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+          <a class="nav-link active" id="demo-links" type="demo">Demo</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="demo-links" type="get">GET</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="demo-links" type="post">POST</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="demo-links" type="put">PUT</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="demo-links" type="delete">DELETE</a>
+        </li>
+      </ul>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Simple demo of using the Movie API</h5>
+      <p class="card-text">Select one of the following request types above to begin.</p>
+      <a class="btn btn-primary" id="demo-button" type="demo">Start</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const demo_links = document.querySelectorAll('#demo-links');
+  const demo_button = document.querySelector('#demo-button');
+  const demo_text = document.querySelector('.card-text');
+
+  function initButton() {
+    demo_button.addEventListener('click', () => {
+      var type = demo_button.getAttribute('type');
+      if (type === 'get') {
+        fetch('movies')
+          .then((response) => response.json())
+          .then((data) => {
+            demo_text.innerHTML = `<ul class="list-group"></ul>`;
+            data.forEach((entry) => {
+              console.log(entry);
+              demo_text.firstChild.innerHTML += `
+                <li class="list-group-item">
+                    <p><b>Title:</b> ${entry.title}</p>
+                    <p><b>PG:</b> ${entry.motion_picture_rating}</p>
+                    <p><b>Plot:</b> ${entry.plot}</p>
+                    <p><b>Duration:</b> ${entry.duration}</p>
+                    <p><b>Rating:</b> ${entry.rating}</p>
+                </li>`;
+            });
+          });
+      } else if (type === 'post') {
+      } else if (type === 'put') {
+      } else if (type === 'delete') {
+      } else {
+      }
+    });
+  }
+
+  function changeCard(type) {
+    document.querySelectorAll('#demo-links').forEach((element) => {
+      element.addEventListener('click', () => {
+        prepareCardChange();
+        var type = element.getAttribute('type');
+        element.classList.add('active');
+        updateCardData(type);
+      });
+    });
+  }
+  function prepareCardChange() {
+    demo_links.forEach((element) => {
+      element.classList.remove('active');
+    });
+  }
+  function updateCardData(type) {
+    const title = document.querySelector('.card-title');
+    if (type === 'get') {
+      title.innerHTML = 'Get all movies';
+      demo_text.innerHTML = 'No extra data is needed';
+      demo_button.setAttribute('type', 'get');
+      demo_button.innerHTML = 'Run';
+    } else if (type === 'post') {
+      title.innerHTML = 'Create one movie';
+      demo_text.innerHTML = ` <p>The following data will be pushed. Make sure to grab the ID</p>
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                      <p><b>title:</b> Test</p>
+                                      <p><b>category:</b> comedy, sci-fi, action</p>
+                                      <p><b>motion picture rating:</b> PG</p>
+                                      <p><b>duration:</b> 2h 30m</p>
+                                      <p><b>plot:</b> This is a test movie</p>
+                                      <p><b>release date:</b> January 1</p>
+                                      <p><b>release year:</b> 2023</p>
+                                      <p><b>rating:</b> 5.0</p>
+                                    </li>
+                                </ul>
+                                <p id="demo-req-output">Demo</p>`;
+      demo_button.setAttribute('type', 'post');
+      demo_button.innerHTML = 'Run';
+    } else if (type === 'put') {
+      title.innerHTML = 'Update one movie';
+      demo_text.innerHTML = ` <p>Movie ID</p><input id="name"></input>
+                              <p>The following changes will be made</p>
+                              <p><b>plot:</b> This is a test movie that was updated</p>
+                              <p id="demo-req-output">Demo</p>`;
+      demo_button.setAttribute('type', 'put');
+      demo_button.innerHTML = 'Run';
+    } else if (type === 'delete') {
+      title.innerHTML = 'Delete one movie';
+      demo_text.innerHTML = `<p>Movie ID</p><input id="name"></input>
+                              <p id="demo-req-output">Demo</p>`;
+      demo_button.setAttribute('type', 'delete');
+      demo_button.innerHTML = 'Run';
+    } else {
+      title.innerHTML = 'Simple demo of using the Movie API';
+      demo_text.innerHTML = 'Select one of the following request types above to begin.';
+      demo_button.setAttribute('type', 'demo');
+      demo_button.innerHTML = 'Start';
+    }
+  }
+  changeCard();
+  initButton();
+</script>

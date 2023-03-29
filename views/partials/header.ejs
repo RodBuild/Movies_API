@@ -1,0 +1,110 @@
+<nav class="navbar navbar-expand-lg bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="javascript:goHome()">Movies API</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <!-- active -->
+          <a class="nav-link" aria-current="page" href="javascript:goDocumentation()"
+            >Documentation</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="javascript:goUser()">User</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="javascript:goAdmin()">Admin</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            About
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href="https://github.com/RodBuild/Movies_API">GitHub</a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item" href="https://www.linkedin.com/in/theizro/">LinkedIn</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <!-- <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form> -->
+    </div>
+  </div>
+</nav>
+
+<script>
+  // const baseUrl = window.location.href;
+  // const baseUrl = 'render.com';
+  const baseUrl = 'http:localhost/3000';
+
+  const isLoggedIn = '<%= isLoggedIn  %>';
+  const isAdmin = '<%= isAdmin  %>';
+  if (isLoggedIn === 'true') {
+    document.querySelectorAll('.nav-link')[1].classList.remove('disabled');
+  }
+  if (isAdmin === 'true') {
+    document.querySelectorAll('.nav-link')[2].classList.remove('disabled');
+  }
+
+  function goHome() {
+    // console.log(window.location.href);
+    window.location = window.location.origin;
+  }
+
+  function goDocumentation() {
+    // window.location.href = baseUrl + 'api-docs';
+    window.location.href = 'api-docs';
+  }
+  function goUser() {
+    window.location.href = 'user';
+  }
+  function goAdmin() {
+    window.location.href = 'admin';
+  }
+
+  function findMoviebyID(id) {
+    return fetch(`movies/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log(data[0]);
+        return data[0];
+      });
+  }
+  function renderMovie(json) {
+    return `<li class="list-group-item">
+              <p><b>Title:</b> ${json.title}</p>
+              <p><b>PG:</b> ${json.motion_picture_rating}</p>
+              <p><b>Plot:</b> ${json.plot}</p>
+              <p><b>Duration:</b> ${json.duration}</p>
+              <p><b>Rating:</b> ${json.rating}</p>
+            </li>`;
+  }
+</script>

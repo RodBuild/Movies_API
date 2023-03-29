@@ -20,6 +20,8 @@ const config = {
 };
 
 app
+  .set('views', './views')
+  .set('view engine', 'ejs')
   .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
   .use(auth(config))
   .use(cors())

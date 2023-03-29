@@ -15,11 +15,7 @@
       "get": {
         "description": "",
         "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
+        "responses": {}
       }
     },
     "/movies/": {
@@ -75,6 +71,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "405": {
+            "description": "Method Not Allowed"
           },
           "422": {
             "description": "Unprocessable Entity"
@@ -158,6 +157,9 @@
           "404": {
             "description": "Not Found"
           },
+          "405": {
+            "description": "Method Not Allowed"
+          },
           "422": {
             "description": "Unprocessable Entity"
           },
@@ -182,6 +184,9 @@
           },
           "404": {
             "description": "Not Found"
+          },
+          "405": {
+            "description": "Method Not Allowed"
           },
           "500": {
             "description": "Internal Server Error"
@@ -213,6 +218,9 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -257,6 +265,9 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "OK"
+          },
           "401": {
             "description": "Unauthorized"
           },
@@ -265,6 +276,44 @@
           },
           "500": {
             "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/favorites-custom": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }

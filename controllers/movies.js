@@ -1,6 +1,6 @@
 const database = require('../database/connect');
 const ObjectId = require('mongodb').ObjectId;
-const { validId } = require('./utils');
+const { validId, isAdmin } = require('./utils');
 
 const getAll = async (req, res) => {
   try {
@@ -9,6 +9,7 @@ const getAll = async (req, res) => {
       res.status(200).json(entries);
     });
   } catch (err) {
+    console.log(err);
     res.status(500).json(`Something went wrong.`);
   }
 };
@@ -34,6 +35,9 @@ const getOne = async (req, res) => {
 
 const createOne = async (req, res) => {
   try {
+    if ((await isAdmin(req.oidc.user)) === false) {
+      return res.status(405).json('That request is not possible.');
+    }
     const newMovie = {
       title: req.body.title,
       category: req.body.category,
@@ -45,7 +49,7 @@ const createOne = async (req, res) => {
       rating: req.body.rating,
     };
 
-    console.log(newMovie);
+    // console.log(newMovie);
     // return res.status(200).json('CREATED');
     const response = await database.getDb().db().collection('movies').insertOne(newMovie);
     console.log(response);
@@ -61,6 +65,9 @@ const createOne = async (req, res) => {
 
 const updateOne = async (req, res) => {
   try {
+    if ((await isAdmin(req.oidc.user)) === false) {
+      return res.status(405).json('That request is not possible.');
+    }
     if (!validId(req.params.id)) {
       return res.status(500).json(`Invalid id`);
     }
@@ -96,6 +103,9 @@ const updateOne = async (req, res) => {
 
 const deleteOne = async (req, res) => {
   try {
+    if ((await isAdmin(req.oidc.user)) === false) {
+      return res.status(405).json('That request is not possible.');
+    }
     if (!validId(req.params.id)) {
       return res.status(500).json(`Invalid id`);
     }

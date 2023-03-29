@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
+
+  <body>
+    <header><%- include('../partials/header'); %></header>
+    <!-- <% var isLoggedIn = isLoggedIn; %> -->
+    <div><button onclick="login()">login</button><button onclick="logout()">logout</button></div>
+    <div class="user-status"></div>
+    
+    <script>
+      // const baseUrl = window.location.href;
+      // const isLoggedIn = '<%= isLoggedIn  %>';
+      // const isAdmin = '<%= isAdmin  %>';
+      // Is loggedin, isadmin, and baseUrl are declared on partials/header
+      if (isLoggedIn === 'true') {
+        document.querySelector('.user-status').innerHTML = `<p> User is logged in <p>`;
+        if (isAdmin === 'true') {
+          document.querySelector('.user-status').innerHTML += `<p> Welcome back admin! <p>`;
+        }
+      } else {
+        document.querySelector('.user-status').innerHTML = `<p> User is not logged in <p>`;
+      }
+      function login() {
+        // window.location.replace('http://www.w3schools.com');
+        window.location.href ='login';
+      }
+      function logout() {
+        window.location.href ='logout';
+      }
+    </script>
+  </body>
+
+  <footer style="margin-top: 40px; width: 100%"><%- include('../partials/footer'); %></footer>
+</html>
