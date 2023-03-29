@@ -80,7 +80,7 @@
               });
           } else if (req_type == 'get') {
             output.innerHTML = '';
-            await fetch('http://localhost:3000/user/favorites')
+            await fetch('user/favorites')
               .then((response) => response.json())
               .then((data) => {
                 console.log(data);
