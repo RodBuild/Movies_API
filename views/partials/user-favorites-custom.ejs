@@ -1,0 +1,41 @@
+<div class="container pt-5">
+  <h1 class="">User Custom Favorites Requests</h1>
+  <div class="user_request">
+    <h2>user data</h2>
+    <button type="button" id="user_request_custom_btn" value="get" class="btn btn-outline-primary">
+      Try
+    </button>
+    <p>make request1</p>
+    <hr />
+  </div>
+</div>
+
+<script>
+  const customUrl = '/user/favorites';
+  function addEventListeners() {
+    document.querySelectorAll('#user_request_custom_btn').forEach((element) => {
+      element.addEventListener('click', async () => {
+        const type = element.getAttribute('value');
+        const output = element.nextElementSibling;
+        if (type == 'get') {
+          await fetch('/user/favorites-custom')
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+              if (Array.isArray(data) === false) {
+                output.innerHTML = `${data}`;
+              } else {
+                data.forEach((entry) => {
+                  // console.log(entry);
+                  output.innerHTML += renderMovie(data);
+                });
+                // output.innerHTML = data;
+                // console.log(output);
+              }
+            });
+        }
+      });
+    });
+  }
+  addEventListeners();
+</script>

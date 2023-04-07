@@ -20,20 +20,10 @@ router.get('/favorites', isAuthenticated, controller.getUserFavorites);
 router.put('/favorites/:movie', isAuthenticated, isValidMovieId, controller.addUserFavorite);
 router.delete('/favorites/:movie', isAuthenticated, isValidMovieId, controller.removeUserFavorite);
 // For user's own movies
-router.get('/favorites-custom', isAuthenticated, validateMovie, controller.getUserFavoritesCustom);
-router.post('/favorites-custom', isAuthenticated, validateMovie, controller.addUserFavoriteCustom);
-router.put(
-  '/favorites-custom',
-  isAuthenticated,
-  validateMovie,
-  controller.updateUserFavoriteCustom
-);
-router.delete(
-  '/favorites-custom',
-  isAuthenticated,
-  validateMovie,
-  controller.deleteUserFavoriteCustom
-);
+router.get('/favorites-custom', isAuthenticated, controller.getUserFavoritesCustom);
+router.post('/favorites-custom', isAuthenticated, controller.addUserFavoriteCustom);
+router.put('/favorites-custom/:movie', isAuthenticated, controller.updateUserFavoriteCustom);
+router.delete('/favorites-custom/:movie', isAuthenticated, controller.deleteUserFavoriteCustom);
 // router.get('/reviews', requiresAuth(), controller.getUserFavorites);
 
 module.exports = router;

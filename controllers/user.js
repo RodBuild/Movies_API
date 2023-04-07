@@ -1,4 +1,5 @@
 const database = require('../database/connect');
+const ObjectId = require('mongodb').ObjectId;
 const { validId } = require('./utils');
 
 const getUserFavorites = async (req, res) => {
@@ -89,11 +90,12 @@ const removeUserFavorite = async (req, res) => {
 const getUserFavoritesCustom = async (req, res) => {
   try {
     const user_email = req.oidc.user.email;
+    console.log(user_email);
     const response = await database
       .getDb()
       .db()
       .collection('user_favorites_custom')
-      .find({ email: user_email });
+      .find({ user_email: user_email });
     response.toArray().then((entries) => {
       if (entries.length > 0) {
         return res.status(200).json(entries);
@@ -105,10 +107,13 @@ const getUserFavoritesCustom = async (req, res) => {
     res.status(500).json(`Something went wrong.`);
   }
 };
+
+// Capable of creating a new entry or updating an exsting one
 const addUserFavoriteCustom = async (req, res) => {
   try {
     const user_email = req.oidc.user.email;
     const newMovie = {
+      user_email: user_email,
       title: req.body.title,
       category: req.body.category,
       motion_picture_rating: req.body.motion_picture_rating,
@@ -118,14 +123,110 @@ const addUserFavoriteCustom = async (req, res) => {
       release_year: req.body.release_year,
       rating: req.body.rating,
     };
-    const response = await database.getDb().db().collection('user_favorites_custom').insertOne({});
+    const response = await database
+      .getDb()
+      .db()
+      .collection('user_favorites_custom')
+      .findOneAndUpdate(
+        { user_email: user_email, title: newMovie.title },
+        {
+          $set: newMovie,
+          $currentDate: { lastModified: true },
+        },
+        { upsert: true }
+      );
+    console.log(response);
+    if (response.lastErrorObject.updatedExisting === false) {
+      res.status(200).json({
+        message: 'Created a new custom movie entry',
+        move_id: response.lastErrorObject.upserted,
+      });
+    } else if (response.lastErrorObject.updatedExisting === true) {
+      res
+        .status(200)
+        .json({ message: 'Updated existing custom movie entry', movie_id: response.value._id });
+    }
+    // op;
+    // res.status(200).json('ok');
   } catch (err) {
     console.log(err);
     res.status(500).json(`Something went wrong.`);
   }
 };
-const updateUserFavoriteCustom = async (req, res) => {};
-const deleteUserFavoriteCustom = async (req, res) => {};
+
+const updateUserFavoriteCustom = async (req, res) => {
+  try {
+    if (!validId(req.params.movie)) {
+      return res.status(500).json(`Invalid id`);
+    }
+    const movie_id = new ObjectId(req.params.movie);
+    const user_email = req.oidc.user.email;
+    const newMovie = {
+      user_email: user_email,
+      title: req.body.title,
+      category: req.body.category,
+      motion_picture_rating: req.body.motion_picture_rating,
+      duration: req.body.duration,
+      plot: req.body.plot,
+      release_date: req.body.release_date,
+      release_year: req.body.release_year,
+      rating: req.body.rating,
+    };
+    const response = await database
+      .getDb()
+      .db()
+      .collection('user_favorites_custom')
+      .findOneAndUpdate(
+        { _id: movie_id, user_email: user_email },
+        {
+          $set: newMovie,
+          $currentDate: { lastModified: true },
+        },
+        { upsert: false }
+      );
+    if (response.lastErrorObject.updatedExisting === false) {
+      res.status(200).json({
+        message: 'No custom movie entry was found under the id',
+        result: 'Unsuccessful',
+      });
+    } else if (response.lastErrorObject.updatedExisting === true) {
+      res
+        .status(200)
+        .json({ message: 'Updated custom movie entry under the id', result: 'Succeesful' });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(`Something went wrong.`);
+  }
+};
+const deleteUserFavoriteCustom = async (req, res) => {
+  try {
+    if (!validId(req.params.movie)) {
+      return res.status(500).json(`Invalid id`);
+    }
+    const user_email = req.oidc.user.email;
+    const movie_id = new ObjectId(req.params.movie);
+    const response = await database
+      .getDb()
+      .db()
+      .collection('user_favorites_custom')
+      .findOneAndDelete({ _id: movie_id, user_email: user_email });
+    console.log(response);
+    if (response.value === null) {
+      res.status(200).json({
+        message: 'No custom movie entry was found under the id',
+        result: 'Unsuccessful',
+      });
+    } else {
+      res
+        .status(200)
+        .json({ message: 'Deleted custom movie entry under the id', result: 'Succeesful' });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(`Something went wrong.`);
+  }
+};
 
 module.exports = {
   getUserFavorites,
